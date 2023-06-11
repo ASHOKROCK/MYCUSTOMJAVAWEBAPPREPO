@@ -1,0 +1,67 @@
+version: '3.3'
+services:
+  myweb:
+      image: nginx:alpine
+      container_name: mywebhost
+      hostname: mynginx
+      privileged: true
+      #readonly: 'true'
+      restart: always
+      stdin_open: true
+      #init: true
+      user: root
+      depends_on:
+        - db
+      working_dir: /app
+      tty: true
+      #expose: '9080'
+      ports:
+      - target: 80
+        published: 9080
+        protocol: tcp
+        mode: host
+      volumes:
+        - type: volume
+          source: mydata
+          target: /data
+          read_only: true
+          volume:
+            nocopy: true
+      ulimits:
+        #noproc: 2000
+        nofile:
+          soft: 200
+          hard: 900
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "600k"
+          max-file: "10"
+  db:
+      image: mysql:5.7
+      container_name: mynewdb
+      hostname: mydb1
+      privileged: true
+      user: root
+      restart: always
+      environment:
+        - MYSQL_ROOT_PASSWORD:mydb1
+        - MYSQL_USER:mynewdb
+        - MYSQL_PASSWORD:mynewdb1
+      volumes:
+        - type: volume
+          source: mynewdata
+          target: /var/lib/mysql
+          read_only: true
+          volume:
+            nocopy: true
+      networks:
+         mynet:
+
+        
+volumes:
+  mydata:  
+  mynewdata:
+networks:
+  mynet:
+    external: true

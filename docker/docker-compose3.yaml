@@ -1,0 +1,29 @@
+version: "3.3"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - cache-redis
+    links:
+      - cache-redis
+  nginx:
+    image: nginx:1.11.1-alpine
+    depends_on:
+      - app
+    links:
+      - app
+    ports:
+      - "8050:80"
+    volumes:
+      - myvol:/usr/share/nginx/html
+  cache-redis:
+    image: redis:3.2.1-alpine
+    volumes:
+      - cache-redis:/var/lib/cache-redis/data
+
+volumes:
+  cache-redis:
+  myvol:
+    #driver: local

@@ -1,0 +1,49 @@
+version: '3.3'
+services:
+  mynewser:
+    build: 
+      context: .
+      args:
+        - myweb=newserver
+    volumes:
+      - type: volume
+        source: mydata
+        target: /usr/share/nginx/html
+        read_only: true
+        volume:
+          nocopy: true
+    restart: always
+    privileged: true
+    depends_on:
+      - db
+    container_name: mynginx
+    hostname: mywebserver
+  
+  db:
+    image: mysql:5.7
+    container_name: mycustomdb
+    hostname: mydb1
+    privileged: true
+    user: root
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD:mynewdb1
+      - MYSQL_USER:mynewdb
+      - MYSQL_PASSWORD:mynewdb1
+      - MYSQL_DATABASE:mywordpress
+    volumes:
+      - type: volume
+        source: mynewdata
+        target: /var/lib/mysql
+        read_only: true
+        volume:
+          nocopy: true
+    networks:
+        mynet:
+
+
+volumes:
+  mynewdata:
+  mydata:
+networks:
+  mynet:

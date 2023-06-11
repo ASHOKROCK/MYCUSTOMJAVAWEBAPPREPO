@@ -1,0 +1,86 @@
+version: '3.3'
+services:
+  myweb:
+      image: httpd:alpine
+      container_name: mycustomweb
+      hostname: myweb
+      privileged: true
+      restart: always
+      stdin_open: true
+      user: root
+      working_dir: /myapp
+      tty: true
+      ports:
+      - target: 80
+        published: 9070
+        protocol: tcp
+        mode: host
+      volumes:
+        - type: volume
+          source: mycustomdata
+          target: /data
+          read_only: true
+          volume:
+            nocopy: true
+      ulimits:
+        #noproc: 2000
+        nofile:
+          soft: 200
+          hard: 900
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "600k"
+          max-file: "10"
+  wordweb:
+      image: wordpress:latest
+      container_name: myfirstdb
+      hostname: mynewdb1
+      privileged: true
+      user: root
+      depends_on:
+        - mydb
+      restart: always
+      environment:
+        - WORD_DB_PASSWORD:mycustomdb1
+        - WORD_DB_USER:myworddb
+        - WORD_DB_NAME:myworddb1
+        - WORD_DB_HOST:db
+      volumes:
+        - type: volume
+          source: mycustomdata
+          target: /var/www/html
+          read_only: true
+          volume:
+            nocopy: true
+      networks:
+         mynet:
+  mydb:
+      image: mysql:5.7
+      container_name: mynewdb
+      hostname: mydb1
+      privileged: true
+      user: root
+      restart: always
+      environment:
+         - MYSQL_ROOT_PASSWORD:mynewdb1
+         - MYSQL_USER:mynewdb
+         - MYSQL_PASSWORD:mynewdb1
+         - MYSQL_DATABASE:mywordpress
+      volumes:
+        - type: volume
+          source: mynewdata
+          target: /var/lib/mysql
+          read_only: true
+          volume:
+            nocopy: true
+      networks:
+         mynet:
+
+volumes:
+  mydata:
+  mynewdata:
+  mycustomdata:
+networks:
+  mynet:
+    external: true
