@@ -1,0 +1,666 @@
+---
+- name: Creating a playbook for web dev
+  hosts: all
+  become: true
+  become_user: root
+  remote_user: root
+  serial: 1
+  connection: ssh
+  vars:
+    - package_name: httpd
+    - name: webserver
+    - my_param: 100
+  gather_facts: yes
+  tasks:
+     - name: Install a software packages
+       yum:
+         name: "{{item}}"
+         state: latest
+       loop:
+          - git
+          - maven
+          - gcc
+          - make
+     - name: Create a directory
+       file:
+         path: /root/mynewdir
+         state: touch
+         owner: root
+         group: root
+         mode: '0777'
+     - name: Create a file
+       file:
+         path: /root/myfile
+         state: touch
+         owner: root
+         group: root
+         mode: '777'
+     - name:  Install a webserver
+       yum:
+         name: "{{package_name}}"
+         state: latest
+     - name: Enable a webserver
+       service:
+         name: "{{package_name}}"
+         enabled: yes
+     - name: start the webserver
+       service:
+         name: "{{package_name}}"
+         state: started
+     - name: Copy a website
+       copy:
+         src: /root/index.html
+         dest: /var/www/html
+         owner: root
+         group: root
+         mode: '0777'
+         remote_src: yes
+     - name: Create  a group
+       group:
+         name: johnsmith
+         gid: '1002'
+     - name: Create a user
+       user:
+         name: newsmith
+         create_home: yes
+         shell: /bin/bash
+         comment: 'THIS IS A MY CUSTOM DEV USER'
+         uid: '1010'
+         generate_ssh_key: yes
+         ssh_key_type: rsa
+         ssh_key_bits: '2048'
+         group: root
+     - name: create a another file
+       file:
+        path: /root/myfile1
+        owner: root
+        group: root
+        state: touch
+        mode: '0777'
+     - name: create a group
+       group:
+         name: ansible
+         gid: '1011'
+     - name: copy a files to another dir
+       copy:
+         src: /root/myfile1
+         dest: /root/mynewdir
+         owner: root
+         dest: root
+         mode: '0777'
+         remote_src: yes
+     - name: copy a file to another file
+       template:
+         src: index.j2
+         dest: /root/myfile1
+         owner: root
+         dest: root
+         mode: '0777'
+     - name: copy a passwd file
+       htpasswd:
+         path: /root/etc/passwd
+         name: janedoe
+         password: '9s36?;fyNp'
+         owner: root
+         group: root
+         mode: '0640'
+     - name: create a facts
+       set_fact:
+         one_fact: "something"
+         other_fact: "no"
+     - name: check a default facts
+       set_fact:
+         one_fact: yes
+         another_fact: "{{ ansible_facts['nodename'] }}"
+     - name: check a packages installed
+       set_stats:
+         data:
+           packages_installed: 15
+         per_host: yes
+
+     - name: sleep 30 seconds and continue play
+       wait_for:
+         timeout: 10
+     - name: wait the webserver for certain timeout
+       wait_for:
+         port: 80
+         host: 0.0.0.0
+         delay: 10
+     - name: wait for checking files exist in remote server
+       wait_for:
+          path: /root/file2
+     #- name: wait for checking "devops" is in file
+       #wait_for:
+         # path: /root/filenew
+        #  search_regex: devops
+     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+       wait_for:
+         port: 22
+         host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+         search_regex: OpenSSH
+         delay: 10
+       connection: local
+     - name: wait for 20 seconds to start
+       wait_for_connection:
+         delay: 10
+         timeout: 20
+     - name: install a java
+       yum:
+         name: java-1.8.0-openjdk
+         state: latest
+     - name: create  a another file
+       file:
+         path: /root/myfirstfile
+         owner: root
+         group: root
+         state: touch
+         mode: '0777'
+     - name: create a directory
+       file:
+         path: /root/myansibledir/
+         owner: root
+         group: root
+         state: directory
+         mode: '0777'
+     - name: install a another java
+       yum:
+         name: java-11-openjdk
+         state: latest
+     - name: create a user
+       user:
+         name: mysmithdev
+         comment: 'THIS IS MY CUSTOM ANOTHER USER'
+         shell: /bin/bash
+         uid: '1012'
+         create_home: yes
+         generate_ssh_key: yes
+         ssh_key_type: rsa
+         ssh_key_bits: '2048'
+     - name: check a java version
+       shell: systemctl status httpd && git --version
+
+     - name: Set authorized key taken from file
+       authorized_key:
+         user: root
+         state: present
+         key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+     - name: Creates a cron file under /etc/cron.d
+       cron:
+         name: yum autoupdate
+         weekday: "2"
+         minute: "0"
+         hour: "12"
+         user: root
+         job: "YUMINTERACTIVE=0 /usr/sbin/yum-autoupdate"
+         cron_file: ansible_yum-autoupdate
+     - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+       cron:
+         name: "check dirs"
+         minute: "0"
+         hour: "5,2"
+         job: "ls -alh > /dev/null"
+     - name: Creates an entry like "PATH=/opt/bin" on top of crontab
+       cron:
+         name: PATH
+         env: yes
+         job: /opt/bin
+     - name: Removes a cron file from under /etc/cron.d
+       cron:
+         name: "yum autoupdate"
+         cron_file: ansible_yum-autoupdate
+         state: absent
+     - name: Add a variable to a file under /etc/cron.d
+       cronvar:
+         name: LOGFILE
+         value: /var/log/yum-autoupdate.log
+         user: root
+         cron_file: ansible_yum-autoupdate
+     - name: create a firewalld service and allow https
+       firewalld:
+         service: https
+         permanent: yes
+         state: enabled
+     - name: create a firewalld service and allow http
+       firewalld:
+         service: http
+         permanent: yes
+         state: enabled
+     - name: create a firewalld service and allow port 8080
+       firewalld:
+         port: 8080/tcp
+         permanent: yes
+         state: enabled
+     - name: create a firewalld service and allow port 9090
+       firewalld:
+         port: 9090/tcp
+         permanent: yes
+         state: enabled
+     - name: create a another group
+       group:
+         name: mygroup
+         gid: '1020'
+     - name: check a passwd file
+       getent:
+         database: passwd
+         key: root
+     - name: check a passwd file
+       debug:
+         var: getent_passwd
+     - name: check a group file
+       getent:
+         database: group
+         key: root
+     - name: check a group file
+       getent:
+         database: shadow
+         split: ':'
+         key: root
+     - name: listen ports of tcp and udp
+       listen_ports_facts:
+     - name: listen for ports
+       debug:
+         msg: "{{ ansible_facts.tcp_listen  | map(attribute='port') | sort | list }}"
+     - name: List Tcp and Udp ports
+       debug:
+         msg: "{{ ansible_facts.udp_listen | map(attribute='port') | sort | list }}"
+     - name: check a group file
+       debug:
+         var: getent_group
+     - name: check a shadow file
+       debug:
+         var: getent_shadow
+     - name: List UDP ports
+       debug:
+         msg: "{{ ansible_facts.udp_listen | map(attribute='port') | sort | list }}"
+     - name: List all ports
+       debug:
+         msg: "{{ (ansible_facts.tcp_listen + ansible_facts.udp_listen) | map(attribute='port') | unique | sort | list }}"
+     - name: Collect only facts returned by facter
+       setup:
+         gather_subset:
+           - '!all'
+           - '!any'
+           - facter
+     - name: Populate service facts
+       service_facts:
+     - name: check  a installed services on remote server
+       debug:
+         var: ansible_facts.services
+     - name: check a vm.swap in sysctl.conf
+       sysctl:
+         name: vm.swappiness
+         value: '5'
+         state: present
+     - name: check a ipv4 in sysctl.conf
+       sysctl:
+         name: net.ipv4.ip_forward
+         value: '1'
+         sysctl_set: yes
+     - name: check a net ipv4
+       sysctl:
+         name: net.ipv4.ip_forward
+         value: '1'
+         sysctl_set: yes
+         state: present
+         reload: yes
+     - name: Make sure a service is running
+       systemd:
+         state: started
+         name: httpd
+     - name: create a directories
+       file:
+         path: /root/mycustomdir/
+         owner: root
+         group: root
+         mode: '0777'
+         state: directory
+     - name: create a directories
+       file:
+         path: /root/mynewdir1/
+         owner: root
+         group: root
+         mode: '0777'
+         state: directory
+     - name: clone a repo from github
+       git:
+         repo: https://github.com/bc0071/mithun_spring-boot-mongo-docker.git
+         dest: /root/mynewdir2/
+     - name: clone a another repo from github
+       git:
+         repo: https://github.com/pravinpdh867/MithunTechnologiesHelm.git
+         dest: /root/mynewdir3/
+         archive: /root/etc/MithunTechnologiesHelm.zip
+     - name: clone a repo from separate directory
+       git:
+         repo: https://github.com/NagaShourya/maven-web-application.git
+         dest: /root/mynewdir4/
+         separate_git_dir: /root/etc/maven-web-application.git
+     - name: create a alias name for clone commit name
+       git_config:
+         name: alias.ci
+         scope: global
+         value: commit
+     - name: create a alias name for clone status name
+       git_config:
+         name: alias.st
+         scope: global
+         value: status
+     - name: Check that you can connect (GET) to a page and it returns a status 200
+       uri:
+         url: http://www.google.com
+     - name: Check that a page returns a status 200 and fail if the word AWESOME is not in the page contents
+       uri:
+         url: http://www.facebook.com
+         return_content: yes
+       register: this
+     - name: Schedule a command to execute in 20 minutes as root
+       at:
+         command: ls -d / >/dev/null
+         count: 5
+         units: minutes
+     - name: Schedule a command to execute in 20 minutes making sure it is unique in the queue
+       at:
+         command: pwd / >/dev/null
+         count: 2
+         units: minutes
+         unique: yes
+     - name: check assert condition
+       assert:
+         that: "ansible_os_family == 'RedHat'"
+     - name: check another assert condition
+       assert:
+         that:
+            - my_param <= 100
+            - my_param >= 0
+       #fail_msg: "'my_param' must be between 0 and 100"
+       #success_msg: "'my_param' is between 0 and 100"
+     - name: now debug a message
+       debug:
+         msg: System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }}
+     - name: Add host to multiple groups
+       add_host:
+         hostname: '10.0.1.7'
+         groups:
+           - 'WEBSERVER'
+     - name: now check a time
+       shell: /usr/bin/uptime
+       register: result
+     - name: now check a verbosity
+       debug:
+         var: result
+         #verbosity: 2
+     - name: write a fail message
+       fail:
+         msg: The system may not be provisioned according to the CMDB status.
+       when: "ansible_os_family != 'RedHat'"
+     - name: Sending an e-mail using Gmail SMTP servers
+       mail:
+         host: smtp.gmail.com
+         port: 587
+         username: sappoguashok462@gmail.com
+         password: gkmaotnuivgxxlci
+         to: Ashok Kumar  <ashokmycarrer9398@example.com>
+         subject: Ansible-report
+         body: System {{ ansible_hostname }} has been successfully provisioned.
+     - name: Sending an e-mail using the remote machine, not the Ansible controller node
+       mail:
+         host: localhost
+         port: 25
+         to: Ashok Kumar <sappoguashok462@example.com>
+         subject: Ansible-report
+         body: System {{ ansible_hostname }} has been successfully provisioned.
+     - name: install ntpdate
+       package:
+         name: ntpdate
+         state: present
+     - name: Gather the rpm package facts
+       package_facts:
+         manager: auto
+     - name: Print the rpm package facts
+       debug:
+         var: ansible_facts.packages
+     - name: Check whether a package called foobar is installed
+       debug:
+         msg: "{{ ansible_facts.packages['httpd'] | length }} versions of httpd are installed!"
+       when: "'httpd' in ansible_facts.packages"
+     -  name: creating a openssh cert
+        openssh_cert:
+          type: user
+          signing_key: /root/.ssh/id_rsa
+          public_key: /root/.ssh/id_rsa.pub
+          path: /root/mynewdir3/myssh
+          valid_from: always
+          valid_to: forever
+     - name: creating a openssh cert
+       openssh_cert:
+         type: user
+         signing_key: /root/.ssh/id_rsa
+         public_key: /root/.ssh/id_rsa.pub
+         path: /root/mynewdir3/myssh
+         valid_from: +0s
+         valid_to: +32w
+         valid_at: +2w
+     - name: install packages
+       yum:
+         name: "{{item}}"
+         state: latest
+       loop:
+         - python
+         - python3-pip
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myansibledir/
+         entity: newsmith
+         etype: user
+         permissions: r
+         state: present
+     - name: Removes the ACL for Joe on a specific file
+       acl:
+         path: /root/myansibledir/
+         entity: newsmith
+         etype: user
+         state: absent
+     - name: Sets default ACL for joe on /etc/foo.d/
+       acl:
+         path: /root/mynewdir1/
+         entity: mysmithdev
+         etype: user
+         permissions: rw
+         default: yes
+         state: present
+     - name: Same as previous but using entry shorthand
+       acl:
+         path: /root/mynewdir2/
+         entry: default:user:mysmithdev:rw-
+         state: present
+     - name: Compress directory /path/to/foo/ into /path/to/foo.tgz
+       archive:
+         path: /root/file2
+         dest: /root/mynewdir1.tgz
+     - name: Create a zip archive of /path/to/foo
+       archive:
+         path: /root/filenew
+         format: zip
+     - name: Create a bz2 archive of multiple files, rooted at /path
+       archive:
+         path:
+           - /root/file2
+           - /root/filenew
+         dest: /root/myfiles.tar.bz2
+         format: bz2
+     - name: Use gzip to compress a single archive (i.e don't archive it first with tar)
+       archive:
+         path: /root/filenew
+         dest: /root/newfile.gz
+         format: gz
+     - name: Create a tar.gz archive of a single file.
+       archive:
+         path: /root/file2
+         dest: /root/file2.tar.gz
+         format: gz
+         force_archive: true
+     - name: Copy using inline content
+       copy:
+         content: ' This file was moved to /root/file2'
+         dest: /root/file2
+     - name: If follow=yes, /path/to/file will be overwritten by contents of foo.conf
+       copy:
+         src: /root/file2
+         dest: /root/filenew                          # link to /path/to/file
+         follow: yes
+         remote_src: yes
+     - name: Copy a "sudoers" file on the remote machine for editing
+       copy:
+         src: /etc/sudoers
+         dest: /etc/sudoers.edit
+         remote_src: yes
+         #validate: /usr/sbin/visudo -csf %s
+     - name: Create a symbolic link
+       file:
+         src: /root/file2
+         dest: /root/myfile2
+         owner: root
+         group: root
+         state: link
+     - name: Create two hard links
+       file:
+         src: '{{ item.src }}'
+         dest: '{{ item.dest }}'
+         state: hard
+       loop:
+         - { src: /root/file2, dest: /root/myfiles }
+         - { src: /root/filenew, dest: /root/mycustomfiles }
+     - name: Store file into /tmp/fetched/host.example.com/tmp/somefile
+       fetch:
+         src: /root/file2
+         dest: /root/
+     - name: Specifying a destination path
+       fetch:
+         src: /root/filenew
+         dest: /root/
+         flat: yes
+     - name: Storing in a path relative to the playbook
+       fetch:
+         src: /root/newfile
+         dest: /root/-{{ inventory_hostname }}
+         flat: yes
+     - name: Recursively find /tmp files older than 2 days
+       find:
+         paths: /root/
+         age: 2d
+         recurse: yes
+     - name: Recursively find /tmp files older than 4 weeks and equal or greater than 1 megabyte
+       find:
+         paths: /root/
+         age: 1w
+         size: 1m
+         recurse: yes
+     - name: Recursively find /var/tmp files with last access time greater than 3600 seconds
+       find:
+         paths: /var/tmp
+         age: 1000
+         age_stamp: atime
+         recurse: yes
+     - name: Find /var/log files equal or greater than 10 megabytes ending with .old or .log.gz
+       find:
+         paths: /var/log
+         patterns: '*.old,*.log.gz'
+         size: 1m
+     - name: Find /var/log files equal or greater than 10 megabytes ending with .old or .log.gz via regex
+       find:
+         paths: /var/log
+         patterns: "^.*?\\.(?:old|log\\.gz)$"
+         size: 10m
+         use_regex: yes
+     - name: Find /var/log all directories, exclude nginx and mysql
+       find:
+         paths: /var/log
+         recurse: no
+         file_type: directory
+         excludes: 'nginx,mysql'
+     - name: Insert/Update "Match User" configuration block in /etc/ssh/sshd_config
+       blockinfile:
+         path: /etc/sudoers
+         block: |
+            Allow root to run any commands anywhere
+            ashok2    ALL=(ALL)       ALL
+
+     - name: Insert/Update HTML surrounded by custom markers after <body> line
+       blockinfile:
+         path: /var/www/html/index.html
+         marker: "<h4>welcome to docker tool<h4>"
+         insertafter: "<body>"
+         block: |
+            "<h5>Welcome to {{ ansible_hostname }}</h1>"
+            "<p>Last updated on {{ ansible_date_time.iso8601 }}</p>"
+     - name: Ensure SELinux is set to enforcing mode
+       lineinfile:
+         path: /etc/selinux/config
+         regexp: '^SELINUX='
+         line: SELINUX=enforcing
+     - name: Make sure group wheel is not in the sudoers configuration
+       lineinfile:
+         path: /etc/sudoers
+         state: absent
+         regexp: '^%wheel'
+     - name: Replace a localhost entry with our own
+       lineinfile:
+         path: /etc/hosts
+         regexp: '^127\.0\.0\.1'
+         line: 127.0.0.1 localhost
+         owner: root
+         group: root
+         mode: '0644'
+     - name: Ensure the default Apache port is 8080
+       lineinfile:
+         path: /etc/httpd/conf/httpd.conf
+         regexp: '^Listen '
+         insertafter: '^#Listen '
+         line: Listen 8080
+     - name: Validate the sudoers file before saving
+       lineinfile:
+         path: /etc/sudoers
+         state: present
+         regexp: '^%root ALL='
+         line: '%root ALL=(ALL) NOPASSWD: ALL'
+        #validate: /usr/sbin/visudo -cf %s
+     - name: insertor update the file
+       lineinfile:
+         path: /var/www/html/index.html
+         state: present
+         regexp: '^<body>'
+         insertafter: '^#<h5>'
+         line: '<h6>welcome to aws cloud and devops</h6>'
+     - name: Read users from CSV file and return a dictionary
+       read_csv:
+         path: input.csv
+         key: Quantity
+       register: users
+       ignore_errors: yes
+     - name: check a file path and it's stat
+       stat:
+         path: /root/file2
+       register: st
+     - name: check a file path and it's stat
+       stat:
+         path: /root/newfile
+       register: mypath
+     - name: debug a path
+       debug:
+         var: st
+     - name: debug a now another path
+       debug:
+         var: mypath
+     - name: create temporary build directory
+       tempfile:
+         state: directory
+         suffix: build
+     - name: create temporary file
+       tempfile:
+         state: file
+         suffix: temp
+       register: tempfile_1
+     - name: Now debug a file
+       debug:
+         var: tempfile_1
+
