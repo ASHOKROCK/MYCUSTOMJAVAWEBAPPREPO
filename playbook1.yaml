@@ -1,0 +1,786 @@
+---
+- name: CREATING A PLAYBOOK FOR REMOTE SERVERS
+  hosts: all
+  become: true
+  become_user: root
+  remote_user: root
+  connection: ssh
+  serial: 1
+  gather_facts: yes
+  tasks:
+     - name: Install a packages
+       apt:
+         name: "{{item}}"
+         state: latest
+       loop:
+          - git
+          - htop
+          - zip
+          - make
+          - unzip
+     - name: Create a file
+       file:
+         path: /root/mynewfile
+         owner: root
+         group: root
+         state: touch
+         mode: '0770'
+     - name: Create a directory
+       file:
+         path: /root/mydir
+         owner: root
+         group: root
+         state: touch
+         mode: '0775'
+     - name: Create a file
+       file:
+         path: /root/newdir
+         owner: root
+         group: root
+         state: touch 
+         mode: '0770'
+     - name: Create a file
+       file:
+         path: /root/newfile1
+         owner: root
+         group: root
+         state: touch
+         mode: '0666'
+     - name: Uninstall a apache
+       apt:
+         name: apache2
+         state: absent
+     - name: Uninstall a nginx
+       apt:
+         name: nginx
+         state: absent
+     - name: Install a Apache2
+       apt:
+         name: apache2
+         state: latest
+     - name: enable a apache
+       service:
+         name: apache2
+         enabled: yes
+     - name: Create a user
+       user:
+         name: ashok
+         create_home: yes
+         uid: '1010'
+         shell: /bin/bash
+         group: root
+         generate_ssh_key: yes
+         ssh_key_bits: '2048'
+         ssh_key_type: rsa
+     - name: create a group
+       group:
+          name: ashokgroup1
+          gid: '1010'
+     - name: create a file
+       file:
+          path: /root/mynewfile1
+          owner: root
+          group: root
+          state: touch
+          mode: '0777'
+     - name: Get a url to download
+       get_url:
+           url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.76/bin/apache-tomcat-9.0.76.zip
+           dest: /root/
+           force_basic_auth: yes
+           #checksum: sha256:da39a3ee5e6b4b0d3255bfef95601890afd80709
+           mode: '0770'
+     - name: get a another url
+       get_url:
+           url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.76/bin/apache-tomcat-9.0.76.tar.gz
+           dest: /root/
+           mode: '0777'
+           force_basic_auth: yes
+     - name: get a url
+       get_url:
+           url: https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.zip
+           dest: /root/
+           mode: '0777'
+     - name: download a url and status to 200
+       uri:
+          url: https://www.google.com
+     - name: get a jsonfile
+       uri:
+         url: https://en.wikipedia.org/wiki/Anushka_Shetty
+         method: GET
+     - name: get  a file
+       uri:
+         url: https://www.w3schools.com/images/w3schools_green.jpg
+         return_content: yes
+       register: mycontent
+       #failed_when: "'W3Schools.com' not in this content"
+     - name: findout remote machine's cpu
+       slurp:
+         src: /proc/cpuinfo
+     - name: findout remote machine's mem
+       slurp:
+         src: /proc/meminfo
+     - name: Find out what the remote machine's mounts are
+       slurp:
+         src: /proc/mounts
+       register: mounts
+     - name: Now Debug a Mounts
+       debug:
+          msg: "{{ mounts['content'] | b64decode }}"
+     - name: findout a remote machine's sshd
+       slurp:
+          src: /var/run/sshd.pid
+       register: sshd
+     - name: findout a remote machine's docker.pid
+       slurp:
+         src: /var/run/docker.pid
+       register: dockerpid
+     - name: now debug a docker pid
+       debug:
+         msg: "{{dockerpid['content'] |b64decode}}"
+     - name: findout a remote machine's crond.pid
+       slurp:
+         src: /var/run/crond.pid
+       register: cronpid
+     - name: now debug a cron pid
+       debug:
+         msg: "{{cronpid['content'] |b64decode}}"
+     - name: Now debug a sshd
+       debug:
+         msg: "{{sshd['content'] | b64decode}}"
+     - name: Test syslog
+       syslogger:
+         msg: "Hello from ansible"
+         priority: "err"
+         facility: "daemon"
+         log_pid: true
+     - name: Simple Usage
+       syslogger:
+         msg: "I will end up as daemon.info"
+     - name: get IP geolocation data
+       ipinfoio_facts:
+     - name: Sending an e-mail using Gmail SMTP servers
+       mail:
+         host: smtp.gmail.com
+         port: 465
+         username: sappoguashok462@gmail.com
+         password: gkmaotnuivgxxlci
+         to: ASHOK ROCK <ashokrock633@gmail.com>
+         subject: Ansible-report
+         body: System {{ ansible_hostname }} has been successfully provisioned.
+     - name: Install latest version of "openjdk-6-jdk" ignoring "install-recommends"
+       apt:
+         name: openjdk-8-jdk
+         state: latest
+         install_recommends: no
+     - name: Upgrade all packages to the latest version
+       apt:
+         name: "*"
+         state: latest
+     - name: Run the equivalent of "apt-get update" as a separate step
+       apt:
+         update_cache: yes
+     - name: Remove useless packages from the cache
+       apt:
+         autoclean: yes
+     - name: Remove dependencies that are no longer required
+       apt:
+         autoremove: yes
+     - name: Install a Package
+       apt:
+         name: nginx
+         state: latest
+     - name: install ntpdate
+       package:
+          name: ntpdate
+          state: latest
+     - name: install the latest version of Apache and MariaDB
+       package:
+         name:
+           - git
+           - python3
+           - python3-pip
+           - openjdk-11-jdk
+           - maven
+           - mariadb-server
+           - gcc
+           
+           - virtualenv
+           - npm
+           - yarn
+         state: latest
+     - name: Uninstall a package
+       package:
+          name: apache2
+          state: absent
+     - name: Install a python lib
+       pip:
+          name: lxml
+     - name: Create a Users
+       user:
+          name: ashok1
+          create_home: yes
+          shell: /bin/bash
+          group: root
+          uid: '1020'
+     - name: Create a Another User
+       user:
+         name: ashok2
+         create_home: yes
+         shell: /bin/bash
+         group: root
+         uid: '1030'
+     - name: Create a Another User
+       user:
+          name: ashok3
+          create_home: yes
+          shell: /bin/bash
+          group: root
+          uid: '1040'
+     - name: Enable a Package
+       service:
+         name: nginx
+         enabled: yes
+     - name: Start The Package
+       service:
+         name: nginx
+         state: started
+     - name: COpy a Static website
+       copy:
+         src: index.html
+         dest: /usr/share/nginx/html
+         owner: root
+         group: root
+         mode: '0777'
+     - name: Just get the list from default pip
+       pip_package_info:
+     - name: Schedule a command to execute in 20 minutes as root
+       at:
+         command: ls -d / >/dev/null
+         count: 1
+         units: minutes
+     - name: Schedule a command to execute in 20 minutes making sure it is unique in the queue
+       at:
+         command: ls -d; pwd / >/dev/null
+         count: 2
+         units: minutes
+         unique: yes
+     - name: Set authorized key taken from file
+       authorized_key:
+         user: ashok1
+         state: present
+         key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+         key_options: 'no-port-forwarding,from="10.0.1.1"'
+     - name: Set authorized key in alternate location
+       authorized_key:
+         user: ashok2
+         state: present
+         key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+         path: /etc/ssh/authorized_keys/ashok2
+         manage_dir: False
+     - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+       cron:
+         name: "check dirs"
+         minute: "0"
+         hour: "1"
+         job: "ls -alh > /dev/null"
+     - name: Creates a cron file under /etc/cron.d
+       cron:
+         name: yum autoupdate
+         weekday: "1"
+         minute: "0"
+         hour: "1"
+         user: root
+         job: "YUMINTERACTIVE=0 /usr/sbin/yum-autoupdate"
+         cron_file: ansible_yum-autoupdate
+     - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+       cron:
+         name: "new dirs"
+         minute: "0"
+         hour: "1"
+         job: "pwd; ls -la > /dev/null"
+     - name: Set authorized key for user ubuntu copying it from current user
+       authorized_key:
+         user: ashok3
+         state: present
+         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+     - name: 'Ensure an old job is no longer present. Removes any job that is prefixed by "#Ansible: an old job" from the crontab'
+       cron:
+         name: "check dirs"
+         state: absent
+     - name: Removes a cron file from under /etc/cron.d
+       cron:
+         name: "yum autoupdate"
+         cron_file: ansible_yum-autoupdate
+         state: absent
+     - name: Gather facts on listening ports
+       listen_ports_facts:
+     - name: List TCP ports
+       debug:
+         msg: "{{ ansible_facts.tcp_listen  | map(attribute='port') | sort | list }}"
+     - name: List UDP ports
+       debug:
+         msg: "{{ ansible_facts.udp_listen | map(attribute='port') | sort | list }}"
+     - name: List all ports
+       debug:
+         msg: "{{ (ansible_facts.tcp_listen + ansible_facts.udp_listen) | map(attribute='port') | unique | sort | list }}"
+     - name: Create a new firewalld
+       firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+     - name: Get a jar file
+       maven_artifact:
+         group_id: junit
+         artifact_id: junit
+         dest: /root/junit-latest.jar
+     - name: Get a Another Jar file
+       maven_artifact:
+         group_id: junit
+         artifact_id: junit
+         version: 4.11
+         dest: /root/junit-4.11.jar
+     - name: Create a Another firewalld
+       firewalld:
+         port: 8081/tcp
+         permanent: yes
+         state: disabled
+     - name: Create a Another one FIrewalld
+       firewalld:
+         port: 161-162/udp
+         permanent: yes
+         state: enabled
+     - name: ANother firewalld rule
+       firewalld:
+         rich_rule: rule service name="ftp" audit limit value="1/m" accept
+         permanent: yes
+         state: enabled
+     - name: Redirect port 443 to 8443 with Rich Rule
+       firewalld:
+         rich_rule: rule family=ipv4 forward-port port=443 protocol=tcp to-port=8443
+         zone: public
+         permanent: yes
+         immediate: yes
+         state: enabled
+     - name: Install a bottle version(specific)
+       pip:
+         name: bottle
+     - name: Allow everything and enable UFW
+       ufw:
+         state: enabled
+         policy: allow
+     - name: Collect only facts returned by facter
+       setup:
+         gather_subset:
+           - '!all'
+           - '!any'
+     - name: Populate service facts
+       service_facts:
+     - debug:
+         var: ansible_facts.services
+     - name: Correct java version selected
+       alternatives:
+         name: java
+         path: /usr/lib/jvm/java-1.8.0-openjdk-amd64
+       register: myjava
+     - name: Now debug a register variable
+       debug:
+         var: myjava
+     - set_fact: one_fact="something" other_fact="myfact"
+     - assert: { that: "ansible_os_family != 'RedHat'" }
+     - name: Create a Openssh key
+       openssh_cert:
+         type: user
+         signing_key: /root/.ssh/id_rsa
+         public_key: /root/.ssh/id_rsa.pub
+         path: /root/git/myssh
+         valid_from: always
+         valid_to: forever
+     - openssh_keypair:
+          path: /root/id_ssh_rsa
+     - name: create a file
+       file:
+         path: /root/myansiblefile
+         owner: root
+         group: root
+         state: touch
+         mode: '0777'
+     - name: Deny all access to port 53
+       ufw:
+         rule: deny
+         port: '53'
+     - name: Allow port range 60000-61000
+       ufw:
+         rule: allow
+         port: 60000:61000
+         proto: tcp
+     - name: Allow all access to tcp port 80
+       ufw:
+         rule: allow
+         port: '80'
+         proto: tcp
+     - name: Now set fact
+       set_fact:
+         one_fact: yes
+         other_fact: no
+     - name: sleep for 300 seconds and continue with play
+       wait_for:
+         timeout: 30
+     - name: Wait for port 80 to become open on the host, don't start checking for 10 seconds
+       wait_for:
+         port: 80
+         delay: 10
+     - name: Wait until the file /tmp/foo is present before continuing
+       wait_for:
+         path: /root/ashokfile
+     - name: Wait until the string "devops" is in the file /tmp/foo before continuing
+       wait_for:
+         path: /root/newfile1
+         search_regex: devops
+     - sysctl:
+         name: vm.swappiness
+         value: '5'
+         state: present
+     - name: Check a nginx status
+       shell: systemctl status nginx
+     - name: Create a file
+       shell: touch cloudfile
+     - name: check command
+       command: ls -la
+     - name: check command
+       shell: ls -l | grep newfile1
+     - name: check another command
+       shell: cat < /root/newfile1
+       args:
+          executable: /bin/bash
+     - name: Install apackage
+       pip:
+         name: pexpect
+     - name: Case insensitive password string match
+       expect:
+         command: passwd ansible
+         responses:
+           (?i)password: "ashok123"
+  # you don't want to show passwords in your logs
+       no_log: true
+     - name: Run a script with arguments (free form)
+       script: /root/myscript.sh --some-argument 1234
+     - name: Run a script using an executable in a non-system path
+       script: /root/newscript.sh
+       args:
+          executable: /bin/bash
+     - name: Run a script using an executable in a non-system path
+       script: /root/mynum.py
+       args:
+         executable: python3
+     - name: return motd to registered var
+       command: cat newfile1
+       register: mymotd
+     - name: Run a command that uses non-posix shell-isms (in this example /bin/sh doesn't handle redirection and wildcards together but bash does)
+       raw: cat < /root/newfile1
+       args:
+         executable: /bin/bash
+     - name: Touch again the same file, but dont change times this makes the task idempotent
+       file:
+         path: /root/mycloudfile
+         state: touch
+         owner: root
+         group: root
+         mode: u+rw,g-wx,o-rwx
+         modification_time: preserve
+         access_time: preserve
+     - name: Store file into /tmp/fetched/host.example.com/tmp/somefile
+       fetch:
+         src: /root/ashokfile
+         dest: /root/
+         flat: yes
+     - name: Create a symbolic link
+       file:
+         src: /root/newfile1
+         dest: /root/customfile1
+         owner: root
+         group: root
+         state: link
+     - name: Create two hard links
+       file:
+         src: '/root/{{ item.src }}'
+         dest: '{{ item.dest }}'
+         state: hard
+       loop:
+         - { src: myfile1, dest: /root/mycustomfile2 }
+         - { src: myfile2, dest: /root/mycustomfile3 }
+   
+     - name: Touch again the same file, but dont change times this makes the task idempotent
+       file:
+         path: /root/mycloudfile
+         state: touch
+         owner: root
+         group: root
+         mode: u+rwx,g-rwx,o-rwx
+         modification_time: now
+         access_time: now
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile4
+         entity: ashok
+         etype: user
+         permissions: r
+         state: present
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile3
+         entity: ashok1
+         etype: user
+         permissions: rw
+         state: present
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile2
+         entity: ansible
+         etype: user
+         permissions: rwx
+         state: present
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile3
+         entity: ansible
+         etype: user
+         permissions: r
+         state: present
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile4
+         entity: ansible
+         etype: user
+         permissions: rw
+         state: present
+     - name: Grant user Joe read access to a file
+       acl:
+         path: /root/myfile2
+         entity: ashok2
+         etype: user
+         permissions: rwx
+         state: present
+     - name: Removes the ACL for Joe on a specific file
+       acl:
+         path: /root/myfile3
+         entity: ansible
+         etype: user
+         state: absent
+     - name: Sets default ACL for joe on /etc/foo.d/
+       acl:
+         path: /root/git
+         entity: ansible
+         etype: user
+         permissions: rwx
+         default: yes
+         state: present
+     - name: Compress directory /path/to/foo/ into /path/to/foo.tgz
+       archive:
+         path: /root/myfile5
+         dest: /root/myfile5.tgz
+     - name: Create a zip archive of /path/to/foo
+       archive:
+         path: /root/myfile5
+         format: zip
+     - name: Create a bz2 archive of multiple files, rooted at /path
+       archive:
+         path:
+           - /root/myfile*
+         dest: /root/newfiles.tar.bz2
+         exclude_path:
+           - /root/myfile8
+           - /root/myfile9
+         format: bz2
+     - name: Use gzip to compress a single archive (i.e don't archive it first with tar)
+       archive:
+         path: /root/myfile8
+         dest: /root/mycustomnewfile.gz
+         format: gz
+     - name: Recursively find /tmp files older than 2 days
+       find:
+         paths: /root
+         age: 1d
+         recurse: yes
+     - name: Recursively find /tmp files older than 4 weeks and equal or greater than 1 megabyte
+       find:
+         paths: /tmp
+         age: 1w
+         size: 1m
+         recurse: yes
+     - name: Find /var/log files equal or greater than 10 megabytes ending with .old or .log.gz
+       find:
+         paths: /var/log
+         patterns: "^.*?\\.(?:log|log\\.gz)$"
+         size: 10m
+         use_regex: yes
+     - name: Find /var/log all directories, exclude nginx and mysql
+       find:
+         paths: /var/log
+         recurse: no
+         file_type: directory
+         excludes: 'nginx,mysql'
+     - name: Use multiple patterns that contain a comma formatted as a YAML list
+       find:
+         paths: /var/log
+         file_type: file
+         use_regex: yes
+         patterns:
+           - '^[a-z]-[A-Z].log$'
+     - name: Extract foo.tgz into /var/lib/foo
+       unarchive:
+        src: nginx.tar
+        dest: /root/
+     - name: Unarchive a file that is already on the remote machine
+       unarchive:
+         src: /root/myfile5.zip
+         dest: /root/git/
+         remote_src: yes
+     - name: Unarchive a file that needs to be downloaded (added in 2.0)
+       unarchive:
+         src: apache-maven-3.9.2-bin.zip         
+         dest: /root/git/
+         remote_src: yes
+     - name: Unarchive a file
+       unarchive:
+         src: /root/newfiles.tar.bz2
+         dest: /root/git/
+         remote_src: yes
+     - name: Make sure group wheel is not in the sudoers configuration
+       lineinfile:
+         path: /etc/sudoers
+         state: absent
+         regexp: '^%wheel'
+     - name: Replace a localhost entry with our own
+       lineinfile:
+         path: /etc/hosts
+         regexp: '^127\.0\.0\.1'
+         line: 127.0.0.1 localhost
+         owner: root
+         group: root
+         mode: '0644'
+     - name: Ensure we have our own comment added to /etc/services
+       lineinfile:
+         path: /etc/services
+         regexp: '^# port for http'
+         insertbefore: '^www.*80/tcp'
+         line: '# port for http by default'
+     - name: Validate the sudoers file before saving
+       lineinfile:
+         path: /etc/sudoers
+         state: present
+         regexp: '^%root ALL='
+         line: '%root ALL=(ALL) NOPASSWD: ALL'
+         validate: /usr/sbin/visudo -cf %s
+     - name: check a file exists or not
+       stat:
+          path: /root/newfile1
+       register: myfile
+     - name: Now debug a var file
+       debug:
+         var: myfile
+     - name: Check Another file path
+       stat:
+          path: /root/myfile2
+       when: myfile.stat.islnk is defined
+     - name: Check a new file path
+       stat:
+         path: /root/myfile3
+       register: newfile
+     - name: Now debug a file
+       debug:
+         msg: "Path exists and isn't a symlink"
+       when: sym.stat.islnk is defined and sym.stat.islnk == False
+     - name: Check a dir path
+       stat:
+         path: /root/git/
+       register: mydir
+     - name: Now Debug a Message
+       debug:
+         msg: "Path exists and is a directory"
+       when: mydir.stat.isdir is defined and mydir.stat.isdir
+     - name: create temporary build directory
+       tempfile:
+         state: directory
+         suffix: build
+     - name: create temporary file
+       tempfile:
+         state: file
+         suffix: temp
+       register: tempfile_1
+     - name: use the registered var and the file module to remove the temporary file
+       file:
+          path: "{{ tempfile_1.path }}"
+          state: absent
+       when: tempfile_1.path is defined
+     - name: Check the 'subjective' attribute of the 'rating' element
+       xml:
+         path: /root/bar.xml
+         xpath: /business/rating/@subjective
+         state: present
+     - name: Add a 'phonenumber' element to the 'business' element
+       xml:
+         path: /root/bar.xml
+         xpath: /business/phonenumber
+         value: 555-555-1234
+     - name: Add several more beers to the 'beers' element and add them before the 'Rochefort 10' element
+       xml:
+         path: /root/bar.xml
+         xpath: '/business/beers/beer[text()="Rochefort 10"]'
+         insertbefore: yes
+         add_children:
+           - beer: Old Rasputin
+           - beer: Old Motor Oil
+           - beer: Old Curmudgeon
+     - name: Add several more beers to the 'beers' element
+       xml:
+          path: /root/bar.xml
+          xpath: /business/beers
+          add_children:
+           - beer: Old Rasputin
+           - beer: Old Motor Oil
+           - beer: Old Curmudgeon
+     - name: Add a 'validxhtml' element to the 'website' element
+       xml:
+         path: /root/bar.xml
+         xpath: /business/website/validxhtml
+     - name: Add an empty 'validatedon' attribute to the 'validxhtml' element
+       xml:
+         path: /root/bar.xml
+         xpath: /business/website/validxhtml/@validatedon
+     - name: Add or modify an attribute, add element if needed
+       xml:
+         path: /root/bar.xml
+         xpath: /business/website/validxhtml
+         attribute: validatedon
+         value: 1976-08-05
+     - name: Template a file to /etc/files.conf
+       template:
+         src: /root/index.j2
+         dest: /usr/share/nginx/html
+         owner: root
+         group: root
+         mode: '0644'
+     - name: Template a file to /etc/files.conf
+       template:
+         src: /root/myindex.j2
+         dest: /root/git/
+         owner: root
+         group: root
+         mode: '0644'
+     - name: Synchronization of src on the control machine to dest on the remote hosts
+       synchronize:
+          src: /root/index.j2
+          dest: /root/newshell
+     - name: Get count of 'beers' nodes
+       xml:
+         path: /root/bar.xml
+         xpath: /business/beers/beer
+         count: yes
+       register: hits
+     - name: Check a My var file
+       debug:
+         var: hits.count
+
+
+
