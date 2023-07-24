@@ -1,0 +1,17 @@
+apiversion: v1
+kind: Pod
+metadata:
+  name: mypodapp
+  labels:
+    app.kubernetes.io/name: MyApp
+spec:
+  containers:
+    - name: mycustomapp
+      image: nginx
+      command: ['sh','-c',"echo The app is running && sleep 30']
+    - name: myoneapp
+      image: httpd
+      command: [ 'sh','-c',"until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done" ]
+    - name: mytwoapp
+      image: nginx:1.14.2
+      command: ['sh','-c',"until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]      

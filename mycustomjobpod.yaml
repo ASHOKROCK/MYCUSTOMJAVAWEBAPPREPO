@@ -1,0 +1,32 @@
+apiversion: batch/v1
+kind: Job
+metadata:
+ name: mycustomjob-failure
+ namespace: mynewdevweb
+spec:
+  completions: 12
+  parallelism: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: myjob-failure
+          image: centos
+          imagePullPolicy: IfNotPresent
+          command: ["bash"]
+          args:
+            - /bin/bash
+            - c
+            - touch newfile; echo "welcome to devops and cloud" >newfile; done && sleep 4 && exit 2
+  backoffLimit: 6
+  podFailurePolicy:            
+    rules:
+    - action: FailJob
+      onExitCodes: 
+         containerName: myjob-failure
+         operator: In
+         values: [42]
+    - action: Ignore
+      onPodConditions:
+      - type: DisruptionTarget
+

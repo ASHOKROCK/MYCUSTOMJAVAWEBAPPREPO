@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mycustomwebserverapp
+  namespace: mynewdevweb
+  annotations:
+    imageregistry: "https://index.docker.io/images/v1"
+    registryname: "https://docker.io/ashokcloud2023/customnginx:v1"
+    reponame: "https://docker.io/ashokcloud2023/mynginx:v1"
+  labels:
+    role: devops
+    stage: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      role: devops
+      stage: dev
+  template:
+    metadata:
+      name: mycustomapp
+      labels:
+         role: devops
+         stage: dev
+    spec:
+      containers:
+        - name: mynewappserver
+          image: nginx
+          imagePullPolicy: IfNotPresent 
+          ports:
+            - name: mynewdepport
+              containerPort: 80
+              protocol: TCP
+
+  
+

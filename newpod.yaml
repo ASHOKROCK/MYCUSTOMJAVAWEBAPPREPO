@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mydevweb
+  namespace: mynewdevweb
+  labels:
+    role: devops
+    stage: dev
+    app: webapp
+spec:
+    replicas: 2
+    selector:
+      role: devops
+      stage: dev
+    template:
+      metadata:
+        name: mynewdev
+        labels:
+          role: devops
+          stage: dev
+          app: webapp
+      spec:
+        containers:
+          - name: mycustomdev
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+              - name: mycustomport
+                containerPort: 80
+                protocol: TCP
+                #TargetPort: 8080
+  

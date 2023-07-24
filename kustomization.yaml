@@ -1,0 +1,8 @@
+resources:
+- secpod.yaml
+resources:
+- secpod.yaml
+resources:
+- pod.yaml
+resources:
+- pod.yaml

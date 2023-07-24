@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysecdev
+  namespace: mynewdevweb
+spec:
+  containers:
+    - name: mycustomwebapp
+      image: nginx
+      imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+    -name: mycustomregistry

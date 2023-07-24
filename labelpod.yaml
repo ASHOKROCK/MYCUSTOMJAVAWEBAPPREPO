@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mycustomwebapp
+  namespace: mynewdevweb
+  annotations:
+     imageregistry: "https://index.docker.io/apps/v1"
+     registryname: "https://docker.io/ashokcloud2023/mycustomnginx:v1"
+     reponame: "https://docker.io/ashokcloud2023/mywebapp:v2"
+  labels:
+    app.kubernetes.io/name: nginx
+    #app.kubernetes.io/instance: nginx_web
+    app.kubernetes.io/version: "1.14.2"
+    app.kubernetes.io/managed-by: nginxproxy
+    app.kubernetes.io/component: webserver
+    app.kubernetes.io/part-of: helm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+       app.kubernetes.io/name: nginx
+       #app.kubenetes.io/instance: nginx_web
+       app.kubernetes.io/version: "1.14.2"
+       app.kubernetes.io/component: webserver
+       app.kubernetes.io/managed-by: nginxproxy
+       app.kubernetes.io/part-of: helm
+  template:
+    metadata:
+      name: mycustomwebapp
+      labels:
+        app.kubernetes.io/name: nginx
+        #app.kubernetes.io/instance: nginx_web"
+        app.kubernetes.io/version: "1.14.2"
+        app.kubernetes.io/component: webserver
+        app.kubernetes.io/managed-by: nginxproxy
+        app.kubernetes.io/part-of: helm
+    spec:
+      containers:
+        - name: mycustomdep
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mycustomwebport
+              containerPort: 80
+              protocol: TCP

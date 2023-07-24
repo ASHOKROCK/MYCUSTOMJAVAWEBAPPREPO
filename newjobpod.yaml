@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mynewjob
+  namespace: mynewdevweb
+spec:
+  backoffLimit: 5
+  activeDeadlineSeconds: 100
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+       - name: mycustomjob
+         image: nginx
+         imagePullPolicy: IfNotPresent
+         command: ["nginx","-g","daemon-off"]
+      

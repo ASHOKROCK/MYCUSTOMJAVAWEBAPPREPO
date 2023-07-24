@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mystateset
+  #namespace: mynewdevweb
+spec:
+  replicas: 3
+  serviceName: "web-nginx"
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      env: dev
+  template:
+    metadata:
+     labels:
+        env: dev
+    spec:
+       terminationGracePeriodSeconds: 10     
+       containers:
+       - name: mystateset
+         image: nginx
+         imagePullPolicy: IfNotPresent
+         ports:
+           - name: mystatesetport
+             containerPort: 8090
+             protocol: TCP
+             hostPort: 8090
+         volumeMounts:
+           - name: mydata
+             mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: mydata
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "my-customstorage-class"
+        resources:
+          requests:
+            storage: 1Gi

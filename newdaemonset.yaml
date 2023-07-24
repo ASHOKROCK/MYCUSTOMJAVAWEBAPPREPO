@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: myappdaemon
+  namespace: mynewdevweb
+  labels:
+    env: dev
+spec:
+  selector:
+    matchLabels:
+      env: dev
+  template:
+    metadata:
+      #name: myappdaemon
+      labels:
+        env: dev
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+       - name: mydaemonjob
+         image: nginx
+         imagePullPolicy: IfNotPresent
+         resources:
+            requests:
+              cpu: 400m
+              memory: 1Gi
+            limits:
+              cpu: 900m
+              memory: 2Gi 
+         volumeMounts:
+           - name: mydaemon-vol
+             mountPath: /var/log
+    terminationGracePeriodSeconds: 30
+    volumes:
+      - name: mydaemon-vol
+        hostPath: 
+          path: /var/log
+
