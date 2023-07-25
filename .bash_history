@@ -1,509 +1,506 @@
-spec:
-  containers:
-    - name: foo
-      image: janedoe/awesomeapp:v1
-  imagePullSecrets:
-    - name: myregistrykey
-EOF
-
-cat <<EOF >> ./kustomization.yaml
-resources:
-- pod.yaml
-EOF
-
-cat <<EOF > pod.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: foo
-  namespace: awesomeapps
-spec:
-  containers:
-    - name: foo
-      image: janedoe/awesomeapp:v1
-  imagePullSecrets:
-    - name: myregistrykey
-EOF
-
-cat <<EOF >> ./kustomization.yaml
-resources:
-- pod.yaml
-EOF
-
-ls
-kubectl get pods
-ls
-vim runtimepod.yaml
-vim runclass.yaml
-kubectl apply -f runclass.yaml
-vim runclass.yaml
-kubectl apply -f runclass.yaml
-vim runclass.yaml
-vim runtimepod.yaml
-ls
-kubectl delete -f mypod.yaml 
-kubectl delete -f pod.yaml 
-kubectl delete -f newpod.yaml 
-kubectl delete -f reppod.yaml 
-kubectl delete -f reppod1.yaml 
-kubectl delete -f podanno.yaml 
-kubectl delete -f labelpod.yaml 
-kubectl get pods
-kubectl delete -f custompods.yaml 
-kubectl delete -f pod.yaml 
-ls
-kubectl get pods
-ls
-az account set --subscription e7c0a305-f524-44fb-a42a-a15ad11af577
-az aks get-credentials --resource-group MYAZUREPRAC --name MYDEVCLUSTER
-kubectl get deployments --all-namespaces=true
-kubectl get pods
-ls
-vim mypod.yaml 
-kubectl apply -f mypod.yaml
-vim mypod.yaml 
-kubectl apply -f mypod.yaml
-vim mypod.yaml 
-kubectl apply -f mypod.yaml
-vim mypod.yaml 
-kubectl apply -f mypod.yaml
-kubectl get pods
-kubectl get pods mycustomwebapp-79jwq -o yaml
-kubectl delete -f mypod.yaml
-vim mypod.yaml 
-ls
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-kubectl delete -f newpod.yaml
-vim newpod.yaml
-kubectl delete -f newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-vim newpod.yaml
-kubectl apply -f newpod.yaml
-kubectl get pods
-ls
-vim lifecyclepod.yaml
-kubectl apply -f lifecyclepod.yaml
-kubectl get pods
-kubectl get pod lifecycle-webapp
-kubectl exec -it lifecycle-webapp --/bin/bash
-kubectl exec -it lifecycle-webapp --bash
-kubectl exec -it lifecycle-webapp bash
-kubectl exec -it lifecycle-webapp bash cat /usr/share/message
-kubectl exec -it lifecycle-webapp --/bin/bash cat /usr/share/message
-kubectl exec -it lifecycle-webapp  cat /usr/share/message
-ls
-vim livenespod.yaml
-kubectl apply -f livenespod.yaml
-vim livenespod.yaml
-kubectl apply -f livenespod.yaml
-kubectl describe pod liveness-exec
-kubectl get pod liveness-exec
-vim httppod.yaml
-vim healthz
-kubectl apply -f httppod.yaml 
-kubectl get pods
+kubectl delete  -f localephemeralsto.yaml
+vim localephemeralsto.yaml
+kubectl apply -f localephemeralsto.yaml
+kubectl get  -f localephemeralsto.yaml
+kubectl describe  -f localephemeralsto.yaml
+kubectl get  -f localephemeralsto.yaml
+kubectl delete  -f localephemeralsto.yaml
+vim localephemeralsto.yaml
+kubectl apply -f localephemeralsto.yaml
+kubectl get -f localephemeralsto.yaml
+kubectl describe -f localephemeralsto.yaml
+kubectl delete -f localephemeralsto.yaml
+vim localephemeralsto.yaml
+kubectl apply -f localephemeralsto.yaml
+kubectl get -f localephemeralsto.yaml
+kubectl describe -f localephemeralsto.yaml
+kubectl delete -f localephemeralsto.yaml
+vim localephemeralsto.yaml
+kubectl apply -f localephemeralsto.yaml
+kubectl get -f localephemeralsto.yaml
+kubectl describe -f localephemeralsto.yaml
+vim localephemeralsto.yaml
+kubectl delete -f localephemeralsto.yaml
+kubectl apply -f localephemeralsto.yaml
+kubectl get -f localephemeralsto.yaml
+kubectl describe -f localephemeralsto.yaml
+kubectl describe pod frontend | grep -A 9999999999 Events
 kubectl get nodes
-ls
-vim tcplivepod.yaml
-kubectl apply -f tcplivepod.yaml
-kubectl get pods
+kubectl describe nodes aks-agentpool-21980493-vmss000000
+kubectl describe pod simmemleak-hra99
+vim awsbind.yaml
+kubectl apply -f  awsbind.yaml
+kubectl get -f  awsbind.yaml
+kubectl describe  -f  awsbind.yaml
 kubectl get nodes
-vim tcplivepod.yaml
-vim grpcpod.yaml
-kubectl apply -f grpcpod.yaml
-kubectl get pods
+vim storagevol.yaml
+kubectl apply -f  storagevol.yaml
+vim storagevol.yaml
+kubectl apply -f  storagevol.yaml
+kubectl get -f  storagevol.yaml
+kubectl describe -f  storagevol.yaml
+vim storagevolpod.yaml
+kubectl apply -f storagevolpod.yaml
+vim storagevolpod.yaml
+kubectl apply -f storagevolpod.yaml
+vim storagevolpod.yaml
+kubectl apply -f storagevolpod.yaml
+vim storagevolpod.yaml
+vim nfsstore.yaml
+kubectl apply -f  nfsstore.yaml
+kubectl get -f  nfsstore.yaml
+kubectl describe  -f  nfsstore.yaml
+vim openstore.yaml
+kubectl apply -f  openstore.yaml
+kubectl get  -f  openstore.yaml
+kubectl describe  -f  openstore.yaml
+vim diskstore.yaml
+kubectl apply -f  diskstore.yaml
+vim diskstore.yaml
+kubectl apply -f  diskstore.yaml
+vim cephstore.yaml
+kubectl apply -f  cephstore.yaml
+vim azurestore.yaml
+kubectl apply -f  azurestore.yaml
+kubectl get -f  azurestore.yaml
+kubectl describe  -f  azurestore.yaml
+vim azurestore1.yaml
+kubecctl apply -f azurestore1.yaml
+kubectl apply -f azurestore1.yaml
+vim azurestore1.yaml
+kubectl apply -f azurestore1.yaml
+vim azurestore1.yaml
+kubectl apply -f azurestore1.yaml
+kubectl get -f azurestore1.yaml
+kubectl describe -f azurestore1.yaml
+vim azurefilestorageclass.yaml
+vim portwormxstore.yaml
+kubectl apply -f  portwormxstore.yaml
+kubectl get -f  portwormxstore.yaml
+kubectl describe  -f  portwormxstore.yaml
+kubectl apply -f  azurefilestorageclass.yaml
+vim azurefilestorageclass.yaml
+kubectl apply -f  azurefilestorageclass.yaml
 ls
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-kubectl get pods
-kubectl delete -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-vim newlivepod.yaml
-kubectl apply -f newlivepod.yaml
-cp newlivepod.yaml livenesspod.yaml
-vim livenesspod.yaml 
-kubectl apply -f livenesspod.yaml
-kubectl get pods
+find /root -mmin +60
+find /ashok -mmin +60
+find ~ ashok -mmin +60
+find ~ ashok -m min +60
+find ~ ashok -mmin +60
+ls -lt
+vim localstore.yaml
+kubectl apply -f  localstore.yaml
+kubectl get  -f  localstore.yaml
+kubectl describe -f  localstore.yaml
+vim dynamicvol.yaml
+kubectl apply -f  dynamicvol.yaml
+vim dynamicvol.yaml
+kubectl apply -f  dynamicvol.yaml
+vim dynamicvol.yaml
+kubectl apply -f  dynamicvol.yaml
+vim dynamicvol.yaml
+kubectl apply -f  dynamicvol.yaml
+vim dynamicvol.yaml
 ls
-vim probespod.yaml
-kubectl apply -f probespod.yaml
-vim probespod.yaml
-kubectl apply -f probespod.yaml
-vim probespod.yaml
-kubectl apply -f probespod.yaml
-vim probespod.yaml
-kubectl apply -f probespod.yaml
-vim initpod.yaml
-kubectl apply -f initpod.yaml 
-kubectl get pods
-kubectl get -f initpod.yaml 
-kubectl describe -f initpod.yaml 
-kubectl logs myapp-pod -c init-myservice
-kubectl logs myapp-pod -c init-mydb
-vim initser.yaml
-kubectl apply -f initser.yaml 
-kubectl get -f initser.yaml 
-kubectl describe -f initser.yaml 
-kubectl logs myapp-pod -c init-mydb
-kubectl logs myapp-pod -c init-myservice
-vim initnewpod.yaml
-vim usernspod.yaml
-kubectl apply -f usernspod.yaml 
-kubectl get -f usernspod.yaml 
-kubectl describe -f usernspod.yaml 
-kubectl attach -it userns bash
-vim usernspod.yaml
-kubectl attach -it shell bash
-kubcetl get pods
-kubectl get pods
-kubectl attach -it userns --/bin/bash
-kubectl attach -it userns  bash
-kubectl attach -it userns  --bash
-kubectl attach -it userns  sh
-for i in {1..100}; do sleep 1; if nslookup myservice; then exit 0; fi; done; exit 1
-curl -X POST http://$MANAGEMENT_SERVICE_HOST:$MANAGEMENT_SERVICE_PORT/register -d 'instance=$(<POD_NAME>)&ip=$(<POD_IP>)
-ls
-vim statepod.yaml
-kubectl apply -f statepod.yaml 
-kubectl get pods
-kubectl get pods -w -l app=nginx
-kubectl get pods 
-kubectl get service nginx
-kubectl get statefulset web
-kubectl get pods -w -l app=nginx
-kubectl get pods -l app=nginx
-for i in 0 1; do kubectl exec "web-$i" -- sh -c 'hostname'; done
-kubectl get pods -l app=nginx
-kubectl run -i --tty --image busybox:1.28 dns-test --restart=Never --rm
-kubectl get pods -l 'app=nginx'
-vim cassandra-service.yaml
-kubectl apply -f cassandra-service.yaml
-kubectl get -f cassandra-service.yaml
-kubectl describe -f cassandra-service.yaml
-kubectl get svc cassandra
-vim cassandra-statefulset.yaml
-kubectl apply -f  cassandra-statefulset.yaml
-kubectl get -f  cassandra-statefulset.yaml
-kubectl describe -f  cassandra-statefulset.yaml
-kubectl get pods
-kubectl get statefulset cassandra
-kubectl get pods -l="app=cassandra"
-kubectl exec -it cassandra-0 -- nodetool status
-kubectl get statefulset cassandra
-kubectl get pod -w -l app=nginx
-kubectl get statefulset cassandra
-vim mystatepod.yaml
-vim mystateservice.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-vim mystateservice.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-vim mystatepod.yaml
-kubectl apply -f mystatepod.yaml
-kubectl get - f mystatepod.yaml 
-kubectl get mystateset
-kubectl describe - f mystatepod.yaml 
-kubectl apply -f  mystateservice.yaml
-vim mystateservice.yaml 
-kubectl apply -f  mystateservice.yaml
-vim mystateservice.yaml 
-kubectl apply -f  mystateservice.yaml
-kubectl get -f mystateservice.yaml 
-kubectl describe  -f mystateservice.yaml 
-kubectl get - f mystatepod.yaml 
-kubectl describe  - f mystatepod.yaml 
-kubectl apply  - f mystatepod.yaml 
-kubectl apply  -f mystatepod.yaml 
-kubectl get -f mystatepod.yaml 
-kubectl describe  -f mystatepod.yaml 
-kubectl get pods
-vim mysql-configmap.yaml
-vim mysql-services.yaml
-vim mysql-statefulset.yaml
-kubectl apply -f  mysql-configmap.yaml
-kubectl apply -f  mysql-services.yaml
-kubectl apply -f  mysql-statefulset.yaml
-kubectl get  -f  mysql-statefulset.yaml
-kubectl describe  -f  mysql-statefulset.yaml
-kubectl get pods
-kubectl get pods -l 'app=mysql'
-ls
-vim livenesspod.yaml 
-vim livenespod.yaml 
-vim daemonpod.yaml
-kubectl apply -f  daemonpod.yaml
-kubectl get -f  daemonpod.yaml
-kubectl describe -f  daemonpod.yaml
-kubectl get pods
-kubectl get -f  daemonpod.yaml
-kubectl get pods
-kubectl describe -f  daemonpod.yaml
-kubectl get pods -l 'app=fluentd-elasticsearch'
-kubectl get pods -l 'app=fluentd-elasticsearch-d4848'
-kubectl delete  -f  daemonpod.yaml
-kubectl get  -f  daemonpod.yaml
-kubectl describe  -f  daemonpod.yaml
-kubectl apply  -f  daemonpod.yaml
-kubectl get  -f  daemonpod.yaml
-kubectl describe  -f  daemonpod.yaml
-kubectl get pods
-kubectl get pods -l 'app=fluentd-elasticsearch'
-kubectl get pods -l 'app=cassandra'
-ls
-kubectl get pods
-vim myinitcon.yaml
-kubectl apply -f myinitcon.yaml
-vim myinitcon.yaml
-kubectl apply -f myinitcon.yaml
-vim myinitcon.yaml
-vim batchjob.yaml
-kubectl apply -f  batchjob.yaml
-kubectl get  -f  batchjob.yaml
-kubectl describe  -f  batchjob.yaml
-kubectl get pods
-vim jobpod.yaml
-kubectl apply -f  jobpod.yaml
-kubectl get  -f  jobpod.yaml
-kubectl describe  -f  jobpod.yaml
-kubectl get pods
-kubectl get pods -l 'app=pi-zvn99'
-kubectl get pods -l 'name=pi-zvn99'
-kubectl get pods 
-kubectl describe pod pi-zvn99
-kubectl describe pod pi-zvn99 -o yaml
-kubectl get pod pi-zvn99 -o yaml
-kubectl get job pi
-kubectl describe  job pi
-kubectl get job pi -o yaml
-pods=$(kubectl get pods --selector=batch.kubernetes.io/job-name=pi --output=jsonpath='{.items[*].metadata.name}')
-echo $pods
-pods=$(kubectl get pods --selector=batch/job-name=pi --output=jsonpath='{.items[*].metadata.name}')
-echo $pods
-kubectl logs $pods
-kubectl logs jobs/pi
-kubectl get pods
-kubectl logs  myapp-pod
-kubectl logs  myapp-container
-kubectl logs  mysql-0
-kubectl logs  mysql-1
-kubectl logs  mysql-2
-kubectl get pods
-kubectl logs  goproxy
-kubectl logs  userns
-kubectl logs  nginx
-vim jobnewpod.yaml
-kubectl apply -f jobnewpod.yaml 
-kubectl get  -f jobnewpod.yaml 
-kubectl describe  -f jobnewpod.yaml 
-kubectl get pods
-vim mycustomjobpod.yaml
-kubectl apply -f mycustomjobpod.yaml 
-kubectl apply -f mycustomjobpod.yaml --validate=false
-vim mycustomjobpod.yaml
-kubectl apply -f mycustomjobpod.yaml --validate=false
-kubectl apply -f mycustomjobpod.yaml 
-kubectl apply -f mycustomjobpod.yaml --validate=false
-vim mycustomjobpod.yaml
-kubectl apply -f mycustomjobpod.yaml --validate=false
-ls
-vim mycustomjobpod.yaml
-vim newjobpod.yaml
-kubectl apply -f  newjobpod.yaml
-kubectl get  -f  newjobpod.yaml
-kubectl describe  -f  newjobpod.yaml
-kubectl get pods
-cp newjobpod.yaml myjobremove.yaml
-vim myjobremove.yaml 
-kubectl apply -f myjobremove.yaml 
-kubectl get -f myjobremove.yaml 
-kubectl describe -f myjobremove.yaml 
-kubectl get pods
-kubectl get jobs
-kubectl patch job/myjob --type=strategic --patch '{"spec":{"suspend":true}}'
-kubectl patch job/mynewjob --type=strategic --patch '{"spec":{"suspend":true}}'
-kubectl patch job/mynewcustomjob --type=strategic --patch '{"spec":{"suspend":true}}'
-kubectl patch job/mynewjob --type=strategic --patch '{"spec":{"suspend":false}}'
-kubectl patch job/mynewcustomjob --type=strategic --patch '{"spec":{"suspend":false}}'
-kubectl get jobs
-kubectl get jobs/mynewjob -o yaml
-kubectl get jobs
-kubectl get jobs/mynewcustomjob -o yaml
-kubectl get pods -l app=mysql --watch
-kubectl run mysql-client --image=mysql:5.7 -i --rm --restart=Never --  mysql -h mysql-0.mysql <<EOFCREATE DATABASE test;
-CREATE TABLE test.messages (message VARCHAR(250));
-INSERT INTO test.messages VALUES ('hello');
-EOF
-
-kubectl run mysql-client --image=mysql:5.7 -i --rm --restart=Never --  mysql -h mysql-0.mysql <<EOFCREATE DATABASE test;
-CREATE TABLE test.messages (message VARCHAR(250));
-INSERT INTO test.messages VALUES ('hello');
-EOF
-
-kubectl run mysql-client --image=mysql:5.7 -i --rm --restart=Never --  mysql -h mysql-0.mysql <<EOFCREATE DATABASE test1;
-CREATE TABLE test1.newmessages (message VARCHAR(250));
-INSERT INTO test1.messages VALUES ('Welcome to Devops');
-EOF
-
-kubectl run mysql-client --image=mysql:5.7 -i --rm --restart=Never --  mysql -h mysql-1.mysql <<EOFCREATE DATABASE test;
-CREATE TABLE test.messages (message VARCHAR(250));
-INSERT INTO test.messages VALUES ('hello');
-EOF
-
-kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never --  mysql -h mysql-read -e "SELECT * FROM test.messages"
-kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --  bash -ic "while sleep 1; do mysql -h mysql-read -e 'SELECT @@server_id,NOW()'; done"
-kubectl exec mysql-2 -c mysql -- mv /usr/bin/mysql /usr/bin/mysql.off
-kubectl get pod mysql-2
-kubectl exec mysql-2 -c mysql -- mv /usr/bin/mysql.off /usr/bin/mysql
-kubectl get pod mysql-2
-kubectl get pod mysql-1
-kubectl get pod mysql-0
-kubectl delete pod mysql-2
-kubectl get pod mysql-2 -o wide
-kubectl get pods
-kubectl get pod mystateset-0 -o wide
-kubectl get pod snowflake-5d4979fb45-h2dww  -o wide
-kubectl get pod myapp-pod  -o wide
-kubectl get nodes
-kubectl drain aks-agentpool-21980493-vmss000000  --force --delete-emptydir-data --ignore-daemonsets
-kubectl get pod mysql-2 -o wide --watch
-kubectl get nodes
-kubectl uncordoned aks-agentpool-21980493-vmss000000
-kubectl uncordon aks-agentpool-21980493-vmss000000
-kubectl get nodes
-kubectl scale statefulset mysql  --replicas=5
-kubectl get pods -l app=mysql --watch
-kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never --  mysql -h mysql-3.mysql -e "SELECT * FROM test.messages"
-kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never --  mysql -h mysql-2.mysql -e "SELECT * FROM test.messages"
-kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never --  mysql -h mysql-1.mysql -e "SELECT * FROM test.messages"
-kubectl scale statefulset mysql --replicas=3
-kubectl get pvc -l app=mysql
-kubectl delete pvc data-mysql-3
-kubectl delete pvc data-mysql-4
-kubectl delete pod mysql-client-loop --now
-kubectl delete pod mysql-client --now
-kubectl get pods
-kubectl delete pod mysql-0 --now
-kubectl delete pod mysql-* --now
-kubectl delete pod mysql-1 --now
-kubectl delete pod mysql-2 --now
-kubectl delete statefulset mysql
-kubectl get pods -l app=mysql
-kubectl delete configmap,service,pvc -l app=mysql
-kubectl get pods -l app=mysql
-kubectl get statefulset cassandra
-kubectl get pods -l="app=cassandra"
-kubectl exec -it cassandra-0 -- nodetool status
-ls
-for i in 0 1; do kubectl exec web-$i -- sh -c 'hostname'; done
-kubectl run -i --tty --image busybox:1.28 dns-test --restart=Never --rm
-ls
-vim volconfig.yaml
-kubectl apply -f  volconfig.yaml
-kubectl apply -f  volconfig.yaml --validate=false
-vim volconfig.yaml
-kubectl apply -f  volconfig.yaml --validate=false
-vim volconfig.yaml
-kubectl apply -f  volconfig.yaml 
-kubectl get pods
-cp volconfig.yaml volconf.yaml
-vim volconf.yaml 
-kubectl apply -f  volconf.yaml 
-kubectl get -f  volconf.yaml 
-kubectl describe -f  volconf.yaml 
-kubectl create configmap log-conf
-kubectl describe -f  volconf.yaml 
-kubectl delete -f  volconf.yaml 
-kubectl apply -f  volconf.yaml 
-kubectl get -f  volconf.yaml 
-kubectl describe -f  volconf.yaml 
-vim emptydirpod.yaml
-kubectl apply -f  emptydirpod.yaml
-kubectl get -f  emptydirpod.yaml
-kubectl describe -f  emptydirpod.yaml
-vim hostpathpod.yaml
-kubectl apply -f  hostpathpod.yaml
-ls
-grace=$(kubectl get pod cassandra-0 -o=jsonpath='{.spec.terminationGracePeriodSeconds}')   && kubectl delete statefulset -l app=cassandra   && echo "Sleeping ${grace} seconds" 1>&2   && sleep $grace   && kubectl delete persistentvolumeclaim -l app=cassandra
-kubectl delete service -l app=cassandra
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-vim newdaemonset.yaml
-kubectl apply -f  newdaemonset.yaml
-ls
-vim batc
-rm -rf batc
-vim batchjob.yaml 
-git remote add origin https://github.com/ASHOKROCK/MYCUSTOMJAVAWEBAPPREPO.git
-git init .
-git remote add origin https://github.com/ASHOKROCK/MYCUSTOMJAVAWEBAPPREPO.git
-git branch -M master
+vim azurestore1.yaml 
+vim azurestore.yaml 
+> dynamicvol.yaml
+cp -R  azurestore.yaml dynamicvol.yaml 
+vim  dynamicvol.yaml
+kubectl apply -f   dynamicvol.yaml
+vim  dynamicvol.yaml
+kubectl apply -f   dynamicvol.yaml
+vim  dynamicvol.yaml
+kubectl apply -f   dynamicvol.yaml
+kubectl get  -f   dynamicvol.yaml
+vim dynamcipvc.yaml
+kubectl apply -f  dynamcipvc.yaml
+kubectl get  -f  dynamcipvc.yaml
+kubectl describe  -f  dynamcipvc.yaml
+vim volsnapcsi.yaml
+kubectl apply -f  volsnapcsi.yaml
+kubectl get -f  volsnapcsi.yaml
+kubectl describe -f  volsnapcsi.yaml
+vim newvolsnap.yaml
+kubectl apply -f  newvolsnap.yaml
+kubectl get -f  newvolsnap.yaml
+kubectl describe  -f  newvolsnap.yaml
+ls -l $PWD | grep -i "july 24"
+ls -l $PWD | grep  "july 24"
+ls -l ${PWD} | grep  "july 24"
+ls -lt /home/ashok | grep  "JULY 24"
+ls -lt /home/ashok | grep  'JUL 24'
+ls -lt 
+ls -lt /home/ashok | grep  'Jul 24'
+mkdir newfiles
+ls -lt /home/ashok | grep  'Jul 24' > newfiles
+ls -lt /home/ashok | grep  'Jul 24' >> newfiles
+touch k8s-yaml-files
+ls -lt /home/ashok | grep  'Jul 24' >> k8s-yaml-files
+cat k8s-yaml-files
+git add k8s-yaml-files 
+git commit -m "new k8s files"
 git status
+git push
+git push origin HEAD:origin
+vim volsnapcontent.yaml
+kubectl apply -f  volsnapcontent.yaml
+vim myvolsnapmode.yaml
+kubectl apply -f  myvolsnapmode.yaml
 ls
+vim mypodcsivol.yaml
+kubectl apply -f  mypodcsivol.yaml
+vim mypodcsivol.yaml
+kubectl apply -f  mypodcsivol.yaml
+kubectl get  -f  mypodcsivol.yaml
+kubectl describe  -f  mypodcsivol.yaml
+kubectl delete -f  mypodcsivol.yaml
+vim mypodcsivol.yaml
+kubectl apply -f  mypodcsivol.yaml
+kubectl get  -f  mypodcsivol.yaml
+kubectl describe  -f  mypodcsivol.yaml
+kubectl get StorageClass
+kubectl delete  -f  mypodcsivol.yaml
+kubectl apply -f  mypodcsivol.yaml
+kubectl delete  -f  mypodcsivol.yaml
+vim mypodcsivol.yaml
+kubectl get pvc
+vim mypodcsivol.yaml
+kubectl apply -f  mypodcsivol.yaml
+kubectl get  -f  mypodcsivol.yaml
+kubectl describe  -f  mypodcsivol.yaml
+kubectl get  -f  mypodcsivol.yaml
+kubectl describe  -f  mypodcsivol.yaml
+Get-Acl C:\var\run\secrets\kubernetes.io\serviceaccount\..2021_08_31_22_22_18.318230061\ca.crt | Format-List
+vim servicepod.yaml
+vim servicenginxpod.yaml
+vim newpod.yaml
+vim newlypod.yaml
+vim servicenginxpod.yaml
+vim newlypod.yaml
+vim servicepod.yaml
+vim newlypod.yaml
+vim servicenginxpod.yaml
+kubectl apply -f  servicenginxpod.yaml
+vim servicenginxpod.yaml
+kubectl apply -f  servicenginxpod.yaml
+kubectl apply -f  newlypod.yaml
+vim servicenginxpod.yaml
+vim newlypod.yaml
+kubectl apply -f  servicepod.yaml
+kubectl get -f  servicepod.yaml
+kubectl describe -f  servicepod.yaml
+kubectl apply -f  newlypod.yaml
+kubectl get -f  newlypod.yaml
+kubectl describe -f  newlypod.yaml
+kubectl describe -f  servicepod.yaml
+curl http://10.244.0.110:9376/
+curl -k http://10.244.0.110:9376/
+curl -SLk http://10.244.0.110:9376/
+ls
+vim endpointpod.yaml
+kubectl apply -f endpointpod.yaml
+kubectl get -f endpointpod.yaml
+kubectl describe -f endpointpod.yaml
+find . -maxdepth 1 newermt "2023/24/07"
+find . -maxdepth 1 -newermt "2023/24/07"
+find . -maxdepth 1 -newermt "2023-24-07"
+find . -maxdepth 1 -newermt "2023-07-24"
+ls -ltX --time-style=+%D | grep 'date +%D'
+ls -alS --time-style=+%D | grep 'date +%D'
+ls
+vim multiservices.yaml
+kubectl apply -f  multiservices.yaml
+kubectl get  -f  multiservices.yaml
+kubectl describe -f  multiservices.yaml
+curl https://10.244.0.110:9377/
+ls
+kubectl get pods
+kubectl get myapp-pod -o wide
+kubectl get pod  myapp-pod -o wide
+vim serlb.yaml
+kubectl apply -f  serlb.yaml
+vim serlb.yaml
+vim multiservices.yaml
+vim serlb.yaml
+kubectl apply -f  serlb.yaml
+vim serlb.yaml
+kubectl apply -f  serlb.yaml
+vim serlb.yaml
+kubectl apply -f  serlb.yaml
+kubectl get -f  serlb.yaml
+curl http://20.124.161.34:80/
+curl http://20.124.161.34:30300/
+vim externalip.yaml
+kubectl apply -f  externalip.yaml
+kubectl get -f  externalip.yaml
+kubectl describe  -f  externalip.yaml
+curl http://10.244.0.110:49152/
+vim ingreess.yaml
+kubectl apply -f ingreess.yaml
+kubectl get -f ingreess.yaml
+kubectl describe -f ingreess.yaml
+kubectl describe ingress ingress-resource-backend
+vim ingressclass.yaml
+kubectl apply -f  ingressclass.yaml
+kubectl get  -f  ingressclass.yaml
+kubectl describe -f  ingressclass.yaml
+vim ingressclass.yaml
+vim ingressclass1.yaml
+kubectl apply -f  ingressclass1.yaml
+kubectl get  -f  ingressclass1.yaml
+kubectl describe -f  ingressclass1.yaml
+kubectl get pods
+ls
+vim newingreesspod.yaml
+kubectl apply -f newingreesspod.yaml
+kubectl get  -f newingreesspod.yaml
+kubectl describe  -f newingreesspod.yaml
+vim newingreessbackend.yaml
+kubectl apply -f  newingreessbackend.yaml
+kubectl get  -f  newingreessbackend.yaml
+kubectl describe  -f  newingreessbackend.yaml
+kubectl get svc
+kubectl get ingress test-ingress
+vim servicenetingreess.yaml
+kubectl apply -f  servicenetingreess.yaml
+kubectl get -f  servicenetingreess.yaml
+kubectl describe  -f  servicenetingreess.yaml
+kubectl get svc
+ls
+kubectl describe ingress simple-fanout-example
+vim namedingreess.yaml
+kubectl apply -f  namedingreess.yaml
+kubectl get  -f  namedingreess.yaml
+kubectl describe -f  namedingreess.yaml
+kubectl get svc
+ls
+vim ingreessnet.yaml
+kubectl apply -f  ingreessnet.yaml
+kubectl describe -f  ingreessnet.yaml
+kubectl describe ingress test
+kubectl edit ingress test
+kubectl describe ingress test
+az group create --name myResourceGroup --location eastus
+az aks create -n myCluster -g myResourceGroup --network-plugin azure --enable-managed-identity --generate-ssh-keys
+ls
+vim endpointslice.yaml
+kubectl apply -f  endpointslice.yaml
+kubectl get -f  endpointslice.yaml
+kubectl describe -f  endpointslice.yaml
+ls
+vim networkpolicies.yaml
+kubectl apply -f  networkpolicies.yaml
+kubectl get  -f  networkpolicies.yaml
+kubectl describe  -f  networkpolicies.yaml
+kubectl get svc
+vim mynetingress.yaml
+kubectl apply -f  mynetingress.yaml
+kubectl get  -f  mynetingress.yaml
+kubectl describe -f  mynetingress.yaml
+vim mynewingresspod.yaml
+kubectl apply -f  mynewingresspod.yaml
+kubectl get -f  mynewingresspod.yaml
+kubectl describe  -f  mynewingresspod.yaml
+kubectl get svc
+vim egreesspod.yaml
+kubectl apply -f  egreesspod.yaml
+kubectl get  -f  egreesspod.yaml
+kubectl describe  -f  egreesspod.yaml
+kubectl get ingress
+kubectl get egress
+vim myegress.yaml
+kubectl apply -f  myegress.yaml
+kubectl get  -f  myegress.yaml
+kubectl describe  -f  myegress.yaml
+kubectl get ingress
+vim ingreess&egreess.yaml
+vim ingreessandegreess.yaml
+kubectl apply -f  ingreessandegreess.yaml
+kubectl get  -f  ingreessandegreess.yaml
+kubectl describe -f  ingreessandegreess.yaml
+kubectl get ingress
+kubectl get egress
+kubectl get pv
+kubectl get pvc
+kubectl get pods
+kubectl get svc
+vim ingreessip.yaml
+kubectl apply -f  ingreessip.yaml
+kubectl get  -f  ingreessip.yaml
+kubectl describe  -f  ingreessip.yaml
+kubectl get pods
+kubectl get svc
+kubectl get pv
+kubectl get pvc
+kubectl label namespace frontend namespace=mynewdevweb
+kubectl label  namespace=mynewdevweb
+kubectl label  namespace mynewdevweb
+kubectl label  namespace=mynewdevweb
+kubectl get nodes --show-labels
+kubectl label nodes aks-agentpool-21980493-vmss000000 disktype=ssd
+kubectl label nodes aks-agentpool-21980493-vmss000001 disktype=ssd
+kubectl get nodes --show-labels | grep -i 'disktype=ssd'
+kubectl get nodes --show-labels | grep -o 'disktype=ssd'
+vim nodeselect.yaml
+kubectl apply -f nodeselect.yaml
+kubectl get  -f nodeselect.yaml
+kubectl describe  -f nodeselect.yaml
+kubectl get  -f nodeselect.yaml
+kubectl get pods | grep -o 'nginx'
+kubectl get pods 
+kubectl get pod nginx -o wide
+kubectl get pods --output=wide
+kubectl label my-pod my-label-key=my-label-value
+kubectl label mypod my-label-key=my-label-value
+kubectl label my-app my-label-key=my-label-value
+kubectl label pv  my-label-key=my-label-value
+kubectl label service  my-label-key=my-label-value
+kubectl label test-pd  my-label-key=my-label-value
+ls
+vim internalpolicy.yaml
+kubectl apply -f  internalpolicy.yaml
+kubectl get -f  internalpolicy.yaml
+kubectl describe -f  internalpolicy.yaml
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+kubectl get pod my-app -o wide
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+vim clusteripallocate.yaml
+kubectl apply -f  clusteripallocate.yaml
+vim networkproxy.yaml
+kubectl apply -f  networkproxy.yaml
+kubectl get  -f  networkproxy.yaml
+kubectl describe  -f  networkproxy.yaml
+kubectl get svc
+vim dualstack.yaml
+kubectl apply -f  dualstack.yaml
+kubectl get svc my-service -o yaml
+vim dnsnet.yaml
+kubectl apply -f dnsnet.yaml
+kubectl get -f dnsnet.yaml
+kubectl describe  -f dnsnet.yaml
+kubectl get pods
+vim netdnspod.yaml
+kubectl apply -f  netdnspod.yaml
+kubectl get  -f  netdnspod.yaml
+kubectl describe  -f  netdnspod.yaml
+kubectl get  -f  netdnspod.yaml
+kubectl get pods
+kubectl get  -f  netdnspod.yaml
+kubectl get pods | grep -i 'busybox'
+vim custom-dns-pod.yaml
+kubectl apply -f  custom-dns-pod.yaml
+kubectl get -f  custom-dns-pod.yaml
+kubectl describe  -f  custom-dns-pod.yaml
+kubectl get -f  custom-dns-pod.yaml
+kubectl get pods | grep -i 'dns-exaple'
+kubectl get dns | grep -i 'dns-exaple'
+kubectl get dns 
+kubectl get ingress
+kubectl get svc
+kubectl exec -it dns-example -- cat /etc/resolv.conf
+ls
+kubectl get apiservices
+kubectl create namespace mem-example
+vim podcpurequest.yaml
+kubectl apply -f  podcpurequest.yaml
+kubectl get pod memory-demo --namespace=mem-example
+kubectl get pod memory-demo --output=yaml --namespace=mem-example
+kubectl top pod memory-demo --namespace=mem-example
+kubectl delete pod memory-demo --namespace=mem-example
+vim mem2.yaml
+kubectl apply -f  mem2.yaml
+kubectl get -f  mem2.yaml
+kubectl delete -f  mem2.yaml
+vim mem2.yaml
+kubectl apply -f  mem2.yaml
+kubectl get -f  mem2.yaml
+kubectl get pod memory-demo-2 --namespace=mem-example
+kubectl describe pod memory-demo-2 --namespace=mem-example
+kubectl describe nodes
+kubectl delete pod memory-demo-2 --namespace=mem-example
+vim cpupod.yaml
+kubectl apply -f  cpupod.yaml
+vim cpupod.yaml
+kubectl apply -f  cpupod.yaml
+kubectl get -f  cpupod.yaml
+kubectl describe -f  cpupod.yaml
+kubectl get pod cpu-demo 
+kubectl get pod cpu-demo --output=yaml
+kubectl top pod cpu-demo 
+kubectl delete pod cpu-demo
+vim mypodcpuresources.yaml
+kubectl apply -f  mypodcpuresources.yaml
+vim cpupods.yaml
+kubectl apply -f  cpupods.yaml
+kubectl get  -f  cpupods.yaml
+kubectl describe  -f  cpupods.yaml
+kubectl get pod qos-demo-5 --output=yaml 
+kubectl -n qos-example patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+kubectl -n mynewdevweb patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"800m"}, "limits":{"cpu":"800m"}}}]}}'
+kubectl get pod qos-demo-5 --output=yaml 
+kubectl describe  -f  cpupods.yaml
+kubectl get pod qos-demo-5 --output=yaml
+kubectl -n mynewdevweb patch pod qos-demo-5 --patch '{"spec":{"containers":[{"name":"qos-demo-ctr-5", "resources":{"requests":{"cpu":"900m"}, "limits":{"cpu":"900m"}}}]}}'
+kubectl get svc
+kubectl get pods
+kubectl get ingress
+kubectl get svc
+vim multi-con.yaml
+kubectl apply -f  multi-con.yaml
+vim multi-con.yaml
+kubectl apply -f  multi-con.yaml
+kubectl get -f  multi-con.yaml
+kubectl describe -f  multi-con.yaml
+kubectl get -f  multi-con.yaml
+kubectl get pods | grep -o 'qos-demo-4'
+kubectl get pods 
+kubectl get pod qos-demo-4  -o wide
+kubectl  get pod qos-demo-4 -o jsonpath='{ .status.qosClass}{"\n"}'
+kubectl delete namespace qos-example
+kubectl delete pod  qos-demo-4
+vim assignpod.yaml
+kubectl apply -f  assignpod.yaml
+kubectl get  -f  assignpod.yaml
+kubectl describe  -f  assignpod.yaml
+kubectl get pods
+kubectl get pod extended-resource-demo
+kubectl describe pod extended-resource-demo
+vim podvol1.yaml
+kubectl apply -f  podvol1.yaml
+kubectl get  -f  podvol1.yaml
+kubectl describe  -f  podvol1.yaml
+kubectl get pods
+kubectl get pod redis --watch
+kubectl exec -it redis -- /bin/bash
+kubectl delete pod redis
+vim projvolnew.yaml
+kubectl apply -f  projvolnew.yaml
+kubectl get  -f  projvolnew.yaml
+kubectl describe -f  projvolnew.yaml
+echo -n "admin" > ./username.txt
+echo -n "1f2d1e2e67df" > ./password.txt
+kubectl create secret generic user --from-file=./username.txt
+kubectl create secret generic pass --from-file=./password.txt
+kubectl delete -f  projvolnew.yaml
+kubectl apply -f  projvolnew.yaml
+kubectl describe -f  projvolnew.yaml
+kubectl get projected-volume
+kubectl get volumes
+kubectl get pv
+kubectl get pods | grep -o 'test-projected-volume'
+ls
+ls -lt 
+ls -lt 'Date+%d' | grep 'Jul 24'
+ls -lt 'Date +%d' | grep 'Jul 24'
+ls -lt 'date +%d' | grep 'Jul 24'
+ls -lt  | grep 'Jul 24'
+git push origin HEAD:origin

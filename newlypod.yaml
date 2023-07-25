@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mycustomservicepod
+  namespace: mynewdevweb
+  labels:
+    app.kubernetes.io/name: myapp
+spec:
+  
+  containers:
+    - name: myappnew
+      image: nginx
+      imagePullPolicy: IfNotPresent
+      ports:
+        - name: mynginxport
+          containerPort: 80
+          protocol: TCP
